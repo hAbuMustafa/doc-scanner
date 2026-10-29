@@ -48,14 +48,21 @@
 {/if}
 
 <div class="master-controls-wrapper">
-  <Filters accentColor="red" bind:contrast bind:brightness bind:grayscale />
+  <Filters
+    accentColor="red"
+    bind:contrast
+    bind:brightness
+    bind:grayscale
+    disabled={!selectedFiles?.length}
+  />
 
-  <Rotate bind:angle={rotation} />
+  <Rotate bind:angle={rotation} disabled={!selectedFiles?.length} />
 
   <button
     class="save-pdf"
     title="save all in a PDF file"
     onclick={canvasesToPdf}
+    disabled={!selectedFiles?.length}
   >
     <SaveAll size="2.5rem" />
   </button>

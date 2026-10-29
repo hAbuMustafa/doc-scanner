@@ -2,13 +2,14 @@
   import FlipRight from "@lucide/svelte/icons/corner-right-down";
   import FlipLeft from "@lucide/svelte/icons/corner-left-down";
 
-  let { angle = $bindable(0) } = $props();
+  let { angle = $bindable(0), disabled = false } = $props();
 </script>
 
 <div class="rotation">
   <button
     onclick={() => (angle -= angle === 0 ? -270 : 90)}
     title="rotate left"
+    {disabled}
   >
     <FlipLeft />
   </button>
@@ -16,6 +17,7 @@
   <button
     onclick={() => (angle += angle === 270 ? -270 : 90)}
     title="rotate rightt"
+    {disabled}
   >
     <FlipRight />
   </button>

@@ -4,21 +4,44 @@
     brightness = $bindable(1),
     grayscale = $bindable(0),
     accentColor = "",
+
+    disabled = false,
   } = $props();
 </script>
 
 <div class="filters" style:accent-color={accentColor}>
   <label>
     Contrast ({contrast.toFixed(2)})
-    <input type="range" bind:value={contrast} min="0" max="2" step="0.01" />
+    <input
+      type="range"
+      bind:value={contrast}
+      min="0"
+      max="2"
+      step="0.01"
+      {disabled}
+    />
   </label>
   <label>
     Brightness ({brightness.toFixed(2)})
-    <input type="range" bind:value={brightness} min="0" max="2" step="0.01" />
+    <input
+      type="range"
+      bind:value={brightness}
+      min="0"
+      max="2"
+      step="0.01"
+      {disabled}
+    />
   </label>
   <label>
     Grayscale ({grayscale.toFixed(2)})
-    <input type="range" bind:value={grayscale} min="0" max="1" step="0.01" />
+    <input
+      type="range"
+      bind:value={grayscale}
+      min="0"
+      max="1"
+      step="0.01"
+      {disabled}
+    />
   </label>
 </div>
 

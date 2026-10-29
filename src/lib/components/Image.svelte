@@ -102,7 +102,10 @@
 </script>
 
 <div class="scan-wrapper">
-  <canvas bind:this={canvas}></canvas>
+  <div class="canvas-wrapper">
+    <canvas bind:this={canvas}></canvas>
+    <small>{file.name}</small>
+  </div>
 
   <div class="controls">
     <Filters bind:contrast={c} bind:brightness={b} bind:grayscale={g} />
@@ -130,10 +133,20 @@
     gap: 1vw;
     place-items: center;
 
-    canvas {
-      max-width: 100%;
-      max-height: 40lvh;
-      border: 1px solid midnightblue;
+    .canvas-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      canvas {
+        max-width: 100%;
+        max-height: 40lvh;
+        border: 1px solid midnightblue;
+      }
+
+      small {
+        color: gray;
+      }
     }
 
     .download-wrapper {

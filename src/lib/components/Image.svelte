@@ -1,13 +1,15 @@
 <script lang="ts">
   import Save from "@lucide/svelte/icons/save";
   import type { Scanner } from "scanic";
-  import { onMount } from "svelte";
+  import { getContext, onMount } from "svelte";
   import Rotate from "./Rotate.svelte";
   import Filters from "./Filters.svelte";
+  import DeleteScan from "@lucide/svelte/icons/x";
 
   type PropsT = {
     file: File;
     scanner: Scanner;
+    index: number;
 
     contrast: number;
     brightness: number;
@@ -19,6 +21,7 @@
   const {
     file,
     scanner,
+    index,
 
     contrast,
     brightness,
@@ -99,6 +102,8 @@
       URL.revokeObjectURL(href);
     };
   });
+
+  const removeFile: (n: number) => void = getContext("remove-file");
 </script>
 
 <div class="scan-wrapper">
@@ -112,10 +117,14 @@
 
     <Rotate bind:angle={r} />
 
-    <div class="download-wrapper">
+    <div class="action-wrapper">
       <a {href} download={file.name} title="download">
-        <Save size="3rem" />
+        <Save size="2rem" />
       </a>
+
+      <button class="icon-button" onclick={() => removeFile(index)}>
+        <DeleteScan size="2rem" />
+      </button>
     </div>
   </div>
 </div>
@@ -149,9 +158,9 @@
       }
     }
 
-    .download-wrapper {
-      display: grid;
-      place-items: center;
+    .action-wrapper {
+      display: flex;
+      justify-content: space-around;
 
       a {
         color: inherit;

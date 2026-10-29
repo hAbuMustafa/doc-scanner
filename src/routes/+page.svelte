@@ -3,10 +3,11 @@
   import ClearFiles from "@lucide/svelte/icons/trash";
   import Image from "#lib/components/Image.svelte";
   import { Scanner } from "scanic";
-  import { onMount } from "svelte";
+  import { onMount, setContext } from "svelte";
   import Rotate from "#lib/components/Rotate.svelte";
   import Filters from "#lib/components/Filters.svelte";
   import { canvasesToPdf } from "#lib/utils/canvases-to-pdf.ts";
+  import { removeFileByIndex } from "#lib/utils/files.ts";
 
   const scanner = new Scanner({ detector: "ml" });
 
@@ -23,6 +24,11 @@
   let rotation = $state(0);
 
   let fileInputElement: HTMLInputElement;
+
+  setContext(
+    "remove-file",
+    (n: number) => (selectedFiles = removeFileByIndex(fileInputElement, n)),
+  );
 </script>
 
 <h1>Doc Scanner with <code>Scanic</code></h1>
@@ -70,8 +76,16 @@
 
 {#if selectedFiles?.length}
   <div class="scans-wrapper">
-    {#each selectedFiles as file (file.name)}
-      <Image {file} {scanner} {contrast} {brightness} {grayscale} {rotation} />
+    {#each selectedFiles as file, index (file.name)}
+      <Image
+        {file}
+        {scanner}
+        {contrast}
+        {brightness}
+        {grayscale}
+        {rotation}
+        {index}
+      />
     {/each}
   </div>
 {/if}

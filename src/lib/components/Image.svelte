@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Save from "@lucide/svelte/icons/save";
+  import SaveAll from "@lucide/svelte/icons/save-all";
   import type { Scanner } from "scanic";
   import { onMount } from "svelte";
   import Rotate from "./Rotate.svelte";
@@ -35,6 +37,8 @@
 
   let r = $derived(rotation);
 
+  let href = $state("");
+
   let filters = $derived(`contrast(${c}) brightness(${b}) grayscale(${g})`);
 
   onMount(async () => {
@@ -43,6 +47,8 @@
     const img = new Image();
     img.src = URL.createObjectURL(file);
     await new Promise((resolve) => (img.onload = resolve));
+
+    href = img.src;
 
     const result = await scanner.scan(img, {
       mode: "extract",
@@ -57,6 +63,10 @@
       ctx.filter = filters;
       ctx.drawImage(scanResult, 0, 0);
       ctx.filter = "none";
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        href = URL.createObjectURL(blob);
+      });
     }
 
     URL.revokeObjectURL(img.src);
@@ -81,6 +91,14 @@
     ctx.drawImage(scanResult, -scanResult.width / 2, -scanResult.height / 2);
     ctx.restore();
     ctx.filter = "none";
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      href = URL.createObjectURL(blob);
+    });
+
+    return () => {
+      URL.revokeObjectURL(href);
+    };
   });
 </script>
 
@@ -91,6 +109,12 @@
     <Filters bind:contrast={c} bind:brightness={b} bind:grayscale={g} />
 
     <Rotate bind:angle={r} />
+
+    <div class="download-wrapper">
+      <a {href} download={file.name} title="download">
+        <Save size="3rem" />
+      </a>
+    </div>
   </div>
 </div>
 
@@ -105,14 +129,21 @@
     display: grid;
     grid-template-columns: 1fr max(25vw, 300px);
     gap: 1vw;
-    justify-content: center;
-    align-items: center;
+    place-items: center;
 
     canvas {
       max-width: 100%;
       max-height: 40lvh;
       border: 1px solid midnightblue;
-      place-self: center;
+    }
+
+    .download-wrapper {
+      display: grid;
+      place-items: center;
+
+      a {
+        color: inherit;
+      }
     }
   }
 </style>

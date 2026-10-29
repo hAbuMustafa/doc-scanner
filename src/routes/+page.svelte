@@ -35,6 +35,30 @@
   <Rotate bind:angle={rotation} />
 </div>
 
-{#each selectedFiles as file (file.name)}
-  <Image {file} {scanner} {contrast} {brightness} {grayscale} {rotation} />
-{/each}
+{#if selectedFiles?.length}
+  <div class="scans-wrapper">
+    {#each selectedFiles as file (file.name)}
+      <Image {file} {scanner} {contrast} {brightness} {grayscale} {rotation} />
+    {/each}
+  </div>
+{/if}
+
+<style>
+  .master-controls-wrapper {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 10vw;
+
+    border: 1px dashed gray;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-block: 1rem;
+  }
+
+  .scans-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+</style>

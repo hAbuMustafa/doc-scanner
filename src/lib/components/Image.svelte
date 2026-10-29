@@ -1,6 +1,4 @@
 <script lang="ts">
-  import FlipRight from "@lucide/svelte/icons/corner-right-down";
-  import FlipLeft from "@lucide/svelte/icons/corner-left-down";
   import type { Scanner } from "scanic";
   import { onMount } from "svelte";
   import Rotate from "./Rotate.svelte";
@@ -87,17 +85,34 @@
 </script>
 
 <div class="scan-wrapper">
+  <canvas bind:this={canvas}></canvas>
+
   <div class="controls">
     <Filters bind:contrast={c} bind:brightness={b} bind:grayscale={g} />
 
     <Rotate bind:angle={r} />
   </div>
-
-  <canvas bind:this={canvas}></canvas>
 </div>
 
 <style>
-  canvas {
-    width: max(25vw, 30vh);
+  .scan-wrapper {
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 2rem;
+    width: max(600px, 25vw);
+
+    display: grid;
+    grid-template-columns: 1fr max(25vw, 300px);
+    gap: 1vw;
+    justify-content: center;
+    align-items: center;
+
+    canvas {
+      max-width: 100%;
+      max-height: 40lvh;
+      border: 1px solid midnightblue;
+      place-self: center;
+    }
   }
 </style>

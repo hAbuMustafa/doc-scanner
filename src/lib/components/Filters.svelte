@@ -21,3 +21,17 @@
     <input type="range" bind:value={grayscale} min="0" max="1" step="0.01" />
   </label>
 </div>
+
+<style>
+  .filters {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+
+    label {
+      display: grid;
+      grid-column: span 2;
+      grid-template-columns: subgrid;
+      white-space: nowrap;
+    }
+  }
+</style>

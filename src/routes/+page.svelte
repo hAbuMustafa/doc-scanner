@@ -1,5 +1,6 @@
 <script lang="ts">
   import SaveAll from "@lucide/svelte/icons/save-all";
+  import ClearFiles from "@lucide/svelte/icons/trash";
   import Image from "#lib/components/Image.svelte";
   import { Scanner } from "scanic";
   import { onMount } from "svelte";
@@ -20,6 +21,8 @@
   let grayscale = $state(0);
 
   let rotation = $state(0);
+
+  let fileInputElement: HTMLInputElement;
 </script>
 
 <h1>Doc Scanner with <code>Scanic</code></h1>
@@ -29,7 +32,20 @@
   multiple
   onchange={(e) =>
     (selectedFiles = (e.currentTarget as HTMLInputElement).files)}
+  bind:this={fileInputElement}
 />
+
+{#if selectedFiles?.length}
+  <button
+    class="icon-button"
+    onclick={() => {
+      selectedFiles = null;
+      fileInputElement.value = "";
+    }}
+  >
+    <ClearFiles color="salmon" size="1rem" />
+  </button>
+{/if}
 
 <div class="master-controls-wrapper">
   <Filters accentColor="red" bind:contrast bind:brightness bind:grayscale />
@@ -65,14 +81,8 @@
     margin-block: 1rem;
 
     button.save-pdf {
-      background: none;
-      border: none;
-      border-radius: 8px;
-      padding: 4px 8px;
-
       &:hover,
       &:focus {
-        background-color: lightgray;
         color: darkblue;
       }
     }

@@ -1,0 +1,12 @@
+.icon-button {
+  background: none;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 8px;
+
+  &:hover,
+  &:focus {
+    background-color: lightgray;
+    color: darkblue;
+  }
+}

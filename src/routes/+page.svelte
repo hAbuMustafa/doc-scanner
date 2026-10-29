@@ -1,9 +1,11 @@
 <script lang="ts">
+  import SaveAll from "@lucide/svelte/icons/save-all";
   import Image from "#lib/components/Image.svelte";
   import { Scanner } from "scanic";
   import { onMount } from "svelte";
   import Rotate from "#lib/components/Rotate.svelte";
   import Filters from "#lib/components/Filters.svelte";
+  import { canvasesToPdf } from "#lib/utils/canvases-to-pdf.ts";
 
   const scanner = new Scanner({ detector: "ml" });
 
@@ -33,6 +35,14 @@
   <Filters accentColor="red" bind:contrast bind:brightness bind:grayscale />
 
   <Rotate bind:angle={rotation} />
+
+  <button
+    class="save-pdf"
+    title="save all in a PDF file"
+    onclick={canvasesToPdf}
+  >
+    <SaveAll size="2.5rem" />
+  </button>
 </div>
 
 {#if selectedFiles?.length}
@@ -46,13 +56,26 @@
 <style>
   .master-controls-wrapper {
     display: grid;
-    grid-template-columns: 3fr 1fr;
+    grid-template-columns: 3fr 1fr 1fr;
     gap: 10vw;
 
     border: 1px dashed gray;
     border-radius: 4px;
     padding: 1rem;
     margin-block: 1rem;
+
+    button.save-pdf {
+      background: none;
+      border: none;
+      border-radius: 8px;
+      padding: 4px 8px;
+
+      &:hover,
+      &:focus {
+        background-color: lightgray;
+        color: darkblue;
+      }
+    }
   }
 
   .scans-wrapper {

@@ -1,6 +1,5 @@
 <script lang="ts">
   import Save from "@lucide/svelte/icons/save";
-  import SaveAll from "@lucide/svelte/icons/save-all";
   import type { Scanner } from "scanic";
   import { onMount } from "svelte";
   import Rotate from "./Rotate.svelte";

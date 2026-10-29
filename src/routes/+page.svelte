@@ -13,8 +13,8 @@
 
   let selectedFiles: FileList | null = $state(null);
 
-  let contrast = $state(1);
-  let brightness = $state(1);
+  let contrast = $state(2);
+  let brightness = $state(2);
   let grayscale = $state(0);
 
   let rotation = $state(0);

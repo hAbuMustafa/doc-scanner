@@ -7,7 +7,7 @@
   import Rotate from "#lib/components/Rotate.svelte";
   import Filters from "#lib/components/Filters.svelte";
   import { canvasesToPdf } from "#lib/utils/canvases-to-pdf.ts";
-  import { removeFileByIndex } from "#lib/utils/files.ts";
+  import { removeFileByFileName } from "#lib/utils/files.ts";
   import { dragHandleZone, type DndEvent } from "svelte-dnd-action";
 
   const scanner = new Scanner({
@@ -31,7 +31,8 @@
 
   setContext(
     "remove-file",
-    (n: number) => (selectedFiles = removeFileByIndex(fileInputElement, n)),
+    (fileName: string) =>
+      (selectedFiles = removeFileByFileName(fileInputElement, fileName)),
   );
 
   function handleSort(e: CustomEvent<DndEvent<File>>) {

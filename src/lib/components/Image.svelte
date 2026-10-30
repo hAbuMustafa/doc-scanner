@@ -104,7 +104,7 @@
     };
   });
 
-  const removeFile: (n: number) => void = getContext("remove-file");
+  const removeFile: (fileName: string) => void = getContext("remove-file");
 </script>
 
 <div class="scan-wrapper">
@@ -125,7 +125,7 @@
         <Save size="2rem" />
       </a>
 
-      <button class="icon-button" onclick={() => removeFile(index)}>
+      <button class="icon-button" onclick={() => removeFile(file.name)}>
         <DeleteScan size="2rem" />
       </button>
     </div>

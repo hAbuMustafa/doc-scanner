@@ -16,7 +16,7 @@
 
   <button
     onclick={() => (angle += angle === 270 ? -270 : 90)}
-    title="rotate rightt"
+    title="rotate right"
     {disabled}
   >
     <FlipRight />

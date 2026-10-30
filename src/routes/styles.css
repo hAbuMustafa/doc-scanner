@@ -1,3 +1,7 @@
+html {
+  color-scheme: light dark;
+}
+
 .icon-button {
   background: none;
   border: none;

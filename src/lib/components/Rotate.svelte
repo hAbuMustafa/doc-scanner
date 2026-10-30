@@ -30,10 +30,11 @@
     justify-content: space-around;
 
     button {
-      background: #eee;
+      background: light-dark(#eee, gray);
       border: none;
       border-radius: 8px;
       padding: 4px 8px;
+      color: light-dark(black, #1c1b22);
 
       &:hover,
       &:focus {

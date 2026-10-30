@@ -9,7 +9,10 @@
   import { canvasesToPdf } from "#lib/utils/canvases-to-pdf.ts";
   import { removeFileByIndex } from "#lib/utils/files.ts";
 
-  const scanner = new Scanner({ detector: "ml" });
+  const scanner = new Scanner({
+    detector: "ml",
+    ml: { assetBaseUrl: "/scanic-ml/dist/" },
+  });
 
   onMount(async () => {
     await scanner.initialize();

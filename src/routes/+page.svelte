@@ -36,8 +36,19 @@
 <input
   type="file"
   multiple
-  onchange={(e) =>
-    (selectedFiles = (e.currentTarget as HTMLInputElement).files)}
+  accept="image/*"
+  onchange={(e) => {
+    const input = e.currentTarget as HTMLInputElement;
+    const dt = new DataTransfer();
+    if (input.files) {
+      for (let i = 0; i < input.files.length; i++) {
+        if (input.files[i].type.startsWith("image/"))
+          dt.items.add(input.files[i]);
+      }
+      input.files = dt.files;
+      selectedFiles = input.files;
+    }
+  }}
   bind:this={fileInputElement}
 />
 

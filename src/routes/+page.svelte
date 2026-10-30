@@ -31,7 +31,11 @@
   );
 </script>
 
-<h1>Doc Scanner with <code>Scanic</code></h1>
+<svelte:head>
+  <title>PhotoScanner</title>
+</svelte:head>
+
+<h1>PhotoScanner</h1>
 
 <input
   type="file"

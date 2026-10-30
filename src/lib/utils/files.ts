@@ -4,5 +4,5 @@ export function removeFileByIndex(input: HTMLInputElement, index: number) {
     if (i !== index) dt.items.add(input.files![i]);
   }
   input.files = dt.files;
-  return input.files;
+  return Array.from(input.files);
 }

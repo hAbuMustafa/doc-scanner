@@ -8,6 +8,7 @@
   import Filters from "#lib/components/Filters.svelte";
   import { canvasesToPdf } from "#lib/utils/canvases-to-pdf.ts";
   import { removeFileByIndex } from "#lib/utils/files.ts";
+  import { dragHandleZone, type DndEvent } from "svelte-dnd-action";
 
   const scanner = new Scanner({
     detector: "ml",
@@ -18,7 +19,7 @@
     await scanner.initialize();
   });
 
-  let selectedFiles: FileList | null = $state(null);
+  let selectedFiles: File[] = $state([]);
 
   let contrast = $state(2);
   let brightness = $state(2);
@@ -32,6 +33,10 @@
     "remove-file",
     (n: number) => (selectedFiles = removeFileByIndex(fileInputElement, n)),
   );
+
+  function handleSort(e: CustomEvent<DndEvent<File>>) {
+    selectedFiles = Array.from(e.detail.items);
+  }
 </script>
 
 <svelte:head>
@@ -49,21 +54,23 @@
     const dt = new DataTransfer();
     if (input.files) {
       for (let i = 0; i < input.files.length; i++) {
-        if (input.files[i].type.startsWith("image/"))
+        if (input.files[i].type.startsWith("image/")) {
+          input.files[i].id = input.files[i].name;
           dt.items.add(input.files[i]);
+        }
       }
       input.files = dt.files;
-      selectedFiles = input.files;
+      selectedFiles = Array.from(input.files);
     }
   }}
   bind:this={fileInputElement}
 />
 
-{#if selectedFiles?.length}
+{#if selectedFiles.length}
   <button
     class="icon-button"
     onclick={() => {
-      selectedFiles = null;
+      selectedFiles = [];
       fileInputElement.value = "";
     }}
   >
@@ -77,23 +84,28 @@
     bind:contrast
     bind:brightness
     bind:grayscale
-    disabled={!selectedFiles?.length}
+    disabled={!selectedFiles.length}
   />
 
-  <Rotate bind:angle={rotation} disabled={!selectedFiles?.length} />
+  <Rotate bind:angle={rotation} disabled={!selectedFiles.length} />
 
   <button
     class="save-pdf icon-button"
     title="save all in a PDF file"
     onclick={canvasesToPdf}
-    disabled={!selectedFiles?.length}
+    disabled={!selectedFiles.length}
   >
     <SaveAll size="2.5rem" />
   </button>
 </div>
 
-{#if selectedFiles?.length}
-  <div class="scans-wrapper">
+{#if selectedFiles.length}
+  <div
+    class="scans-wrapper"
+    use:dragHandleZone={{ items: selectedFiles, flipDurationMs: 200 }}
+    onconsider={handleSort}
+    onfinalize={handleSort}
+  >
     {#each selectedFiles as file, index (file.name)}
       <Image
         {file}

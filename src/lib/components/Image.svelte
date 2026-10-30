@@ -5,6 +5,7 @@
   import Rotate from "./Rotate.svelte";
   import Filters from "./Filters.svelte";
   import DeleteScan from "@lucide/svelte/icons/x";
+  import { dragHandle } from "svelte-dnd-action";
 
   type PropsT = {
     file: File;
@@ -44,7 +45,7 @@
   let filters = $derived(`contrast(${c}) brightness(${b}) grayscale(${g})`);
 
   onMount(async () => {
-    if (!file) return;
+    if (!file || !file.name) return;
 
     const img = new Image();
     img.src = URL.createObjectURL(file);
@@ -107,6 +108,8 @@
 </script>
 
 <div class="scan-wrapper">
+  <div class="drag-handle" use:dragHandle>⠿</div>
+
   <div class="canvas-wrapper">
     <canvas bind:this={canvas}></canvas>
     <small>{file.name}</small>
@@ -138,7 +141,7 @@
     width: max(600px, 25vw);
 
     display: grid;
-    grid-template-columns: 1fr max(25vw, 300px);
+    grid-template-columns: 2ch 1fr max(25vw, 300px);
     gap: 1vw;
     place-items: center;
 

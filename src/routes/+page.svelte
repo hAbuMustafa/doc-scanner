@@ -65,7 +65,7 @@
   <Rotate bind:angle={rotation} disabled={!selectedFiles?.length} />
 
   <button
-    class="save-pdf"
+    class="save-pdf icon-button"
     title="save all in a PDF file"
     onclick={canvasesToPdf}
     disabled={!selectedFiles?.length}

@@ -1,10 +1,11 @@
 <script lang="ts">
   import SaveAll from "@lucide/svelte/icons/save-all";
+  import FlipRight from "@lucide/svelte/icons/iteration-cw";
+  import FlipLeft from "@lucide/svelte/icons/iteration-ccw";
   import ClearFiles from "@lucide/svelte/icons/trash";
   import Image from "#lib/components/Image.svelte";
   import { Scanner } from "scanic";
   import { onMount, setContext } from "svelte";
-  import Rotate from "#lib/components/Rotate.svelte";
   import Filters from "#lib/components/Filters.svelte";
   import { canvasesToPdf } from "#lib/utils/canvases-to-pdf.ts";
   import { removeFileByFileName } from "#lib/utils/files.ts";
@@ -25,7 +26,8 @@
   let brightness = $state(2);
   let grayscale = $state(0);
 
-  let rotation = $state(0);
+  let flipRight = $state(false);
+  let flipLeft = $state(false);
 
   let fileInputElement: HTMLInputElement;
 
@@ -88,7 +90,29 @@
     disabled={!selectedFiles.length}
   />
 
-  <Rotate bind:angle={rotation} disabled={!selectedFiles.length} />
+  <div class="master-rotation-controls">
+    <button
+      class="flip icon-button"
+      title="flip all images to the left by 90 degrees"
+      onclick={() => {
+        flipLeft = !flipLeft;
+      }}
+      disabled={!selectedFiles.length}
+    >
+      <FlipLeft size="2.5rem" />
+    </button>
+
+    <button
+      class="flip icon-button"
+      title="flip all images to the right by 90 degrees"
+      onclick={() => {
+        flipRight = !flipRight;
+      }}
+      disabled={!selectedFiles.length}
+    >
+      <FlipRight size="2.5rem" />
+    </button>
+  </div>
 
   <button
     class="save-pdf icon-button"
@@ -114,7 +138,8 @@
         {contrast}
         {brightness}
         {grayscale}
-        {rotation}
+        {flipRight}
+        {flipLeft}
         {index}
       />
     {/each}
@@ -131,6 +156,11 @@
     border-radius: 4px;
     padding: 1rem;
     margin-block: 1rem;
+
+    .master-rotation-controls {
+      display: flex;
+      justify-content: space-around;
+    }
 
     button.save-pdf {
       &:hover,

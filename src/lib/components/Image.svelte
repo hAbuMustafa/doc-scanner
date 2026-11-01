@@ -1,7 +1,7 @@
 <script lang="ts">
   import Save from "@lucide/svelte/icons/save";
   import type { Scanner } from "scanic";
-  import { getContext, onMount } from "svelte";
+  import { getContext, onMount, untrack } from "svelte";
   import Rotate from "./Rotate.svelte";
   import Filters from "./Filters.svelte";
   import DeleteScan from "@lucide/svelte/icons/x";
@@ -16,7 +16,8 @@
     brightness: number;
     grayscale: number;
 
-    rotation: number;
+    flipRight: boolean;
+    flipLeft: boolean;
   };
 
   const {
@@ -28,7 +29,8 @@
     brightness,
     grayscale,
 
-    rotation,
+    flipRight,
+    flipLeft,
   }: PropsT = $props();
 
   let canvas: HTMLCanvasElement;
@@ -38,7 +40,7 @@
   let b = $derived(brightness);
   let g = $derived(grayscale);
 
-  let r = $derived(rotation);
+  let r = $derived(0);
 
   let href = $state("");
 
@@ -102,6 +104,22 @@
     return () => {
       URL.revokeObjectURL(href);
     };
+  });
+
+  $effect(() => {
+    const fl = flipLeft;
+
+    untrack(() => {
+      r -= r === 0 ? -270 : 90;
+    });
+  });
+
+  $effect(() => {
+    const fr = flipRight;
+
+    untrack(() => {
+      r += r === 270 ? -270 : 90;
+    });
   });
 
   const removeFile: (fileName: string) => void = getContext("remove-file");

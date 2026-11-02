@@ -165,7 +165,7 @@
 </div>
 
 {#if scanResult}
-  <CornerEditor image={img} canvas={scanResult} {index} />
+  <CornerEditor image={img} bind:canvas={scanResult} {index} />
 {/if}
 
 <style>

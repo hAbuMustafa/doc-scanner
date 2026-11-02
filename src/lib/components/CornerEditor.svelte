@@ -13,7 +13,7 @@
     index: number;
   };
 
-  let { image, canvas, index }: PropsT = $props();
+  let { image, canvas = $bindable(), index }: PropsT = $props();
 
   let editor: CornerEditor;
 

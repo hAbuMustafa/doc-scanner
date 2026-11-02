@@ -3,7 +3,9 @@ import { PDFDocument } from "pdf-lib";
 export async function canvasesToPdf() {
   const pdf = await PDFDocument.create();
 
-  const canvases = document.querySelectorAll("canvas");
+  const canvases = document.querySelectorAll<HTMLCanvasElement>(
+    ".scan-wrapper > .canvas-wrapper > canvas",
+  );
 
   for (const canvas of canvases) {
     const blob = await new Promise<Blob>((r) =>

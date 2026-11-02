@@ -10,16 +10,21 @@
   type PropsT = {
     image: HTMLImageElement | HTMLCanvasElement | ImageData;
     canvas: HTMLCanvasElement;
+    index: number;
   };
 
-  let { image, canvas }: PropsT = $props();
+  let { image, canvas, index }: PropsT = $props();
 
   let editor: CornerEditor;
 
   let dialog: HTMLDialogElement;
 
   onMount(async () => {
-    const detection = await scanDocument(image, { mode: "detect" });
+    const detection = await scanDocument(image, {
+      mode: "detect",
+      detector: "ml",
+      ml: { assetBaseUrl: "/scanic-ml/dist/" },
+    });
 
     editor = createCornerEditor({
       container: dialog,
@@ -30,7 +35,9 @@
           output: "canvas",
         });
         canvas = extracted.output as HTMLCanvasElement;
-        editor.destroy();
+        dialog.close();
+      },
+      onCancel: () => {
         dialog.close();
       },
     });
@@ -41,4 +48,10 @@
   });
 </script>
 
-<dialog id="corner-editor" bind:this={dialog}></dialog>
+<dialog id="corner-editor-{index}" bind:this={dialog}></dialog>
+
+<style>
+  dialog {
+    width: 80vw;
+  }
+</style>

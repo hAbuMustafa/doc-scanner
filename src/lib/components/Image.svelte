@@ -1,11 +1,13 @@
 <script lang="ts">
   import Save from "@lucide/svelte/icons/save";
+  import EditCorners from "@lucide/svelte/icons/square-dashed-mouse-pointer";
   import type { Scanner } from "scanic";
   import { getContext, onMount, untrack } from "svelte";
   import Rotate from "./Rotate.svelte";
   import Filters from "./Filters.svelte";
   import DeleteScan from "@lucide/svelte/icons/x";
   import { dragHandle } from "svelte-dnd-action";
+  import CornerEditor from "./CornerEditor.svelte";
 
   type PropsT = {
     file: File;
@@ -34,7 +36,10 @@
   }: PropsT = $props();
 
   let canvas: HTMLCanvasElement;
-  let scanResult: HTMLCanvasElement;
+  let scanResult: HTMLCanvasElement = $state();
+  let img: HTMLImageElement | HTMLCanvasElement | ImageData = $state(
+    new Image(),
+  );
 
   let c = $derived(contrast);
   let b = $derived(brightness);
@@ -49,7 +54,7 @@
   onMount(async () => {
     if (!file || !file.name) return;
 
-    const img = new Image();
+    img = new Image();
     img.src = URL.createObjectURL(file);
     await new Promise((resolve) => (img.onload = resolve));
 
@@ -139,6 +144,15 @@
     <Rotate bind:angle={r} />
 
     <div class="action-wrapper">
+      <button
+        class="icon-button"
+        command="show-modal"
+        commandfor="corner-editor-{index}"
+        title="Edit Corners"
+      >
+        <EditCorners size="2rem" />
+      </button>
+
       <a {href} download={file.name} title="download">
         <Save size="2rem" />
       </a>
@@ -149,6 +163,10 @@
     </div>
   </div>
 </div>
+
+{#if scanResult}
+  <CornerEditor image={img} canvas={scanResult} {index} />
+{/if}
 
 <style>
   .scan-wrapper {
@@ -182,6 +200,7 @@
     .action-wrapper {
       display: flex;
       justify-content: space-around;
+      align-items: center;
 
       a {
         color: inherit;

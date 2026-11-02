@@ -153,7 +153,7 @@
         <EditCorners size="2rem" />
       </button>
 
-      <a {href} download={file.name} title="download">
+      <a class="icon-button" {href} download={file.name} title="download">
         <Save size="2rem" />
       </a>
 
@@ -201,10 +201,6 @@
       display: flex;
       justify-content: space-around;
       align-items: center;
-
-      a {
-        color: inherit;
-      }
     }
   }
 </style>

@@ -10,12 +10,15 @@
     "postinstall": "npx copyfiles -u 1 \"node_modules/scanic-ml/dist/*\" static/",
     "prepare": "svelte-kit sync || echo ''",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "deploy": "pnpm run build && pnpm dlx gh-pages -d build"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^8.0.0",
+    "@sveltejs/adapter-static": "^4.0.1",
     "@sveltejs/kit": "^3.0.0",
     "@sveltejs/vite-plugin-svelte": "^7.2.0",
+    "gh-pages": "^6.3.0",
     "svelte": "^5.57.1",
     "svelte-check": "^4.6.0",
     "typescript": "^6.0.3",

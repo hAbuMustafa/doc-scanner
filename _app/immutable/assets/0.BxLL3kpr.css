@@ -1,0 +1,1 @@
+html{--lightningcss-light:initial;--lightningcss-dark: ;color-scheme:light dark}@media (prefers-color-scheme:dark){html{--lightningcss-light: ;--lightningcss-dark:initial}}.icon-button{background:0 0;border:none;border-radius:8px;padding:4px 8px}.icon-button:hover,.icon-button:focus{color:#00008b;background-color:#d3d3d3}

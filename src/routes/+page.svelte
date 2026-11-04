@@ -84,13 +84,7 @@
   </button>
 
   <div class="master-controls-wrapper master-zone">
-    <Filters
-      accentColor="red"
-      bind:contrast
-      bind:brightness
-      bind:grayscale
-      disabled={!selectedFiles.length}
-    />
+    <Filters accentColor="red" bind:contrast bind:brightness bind:grayscale />
 
     <div class="master-rotation-controls">
       <button
@@ -99,7 +93,6 @@
         onclick={() => {
           flipLeft = !flipLeft;
         }}
-        disabled={!selectedFiles.length}
       >
         <FlipLeft size="2.5rem" />
       </button>
@@ -110,7 +103,6 @@
         onclick={() => {
           flipRight = !flipRight;
         }}
-        disabled={!selectedFiles.length}
       >
         <FlipRight size="2.5rem" />
       </button>
@@ -120,7 +112,6 @@
       class="save-pdf icon-button"
       title="save all in a PDF file"
       onclick={canvasesToPdf}
-      disabled={!selectedFiles.length}
     >
       <SaveAll size="2.5rem" />
     </button>

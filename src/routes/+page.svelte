@@ -77,39 +77,41 @@
     <ClearFiles color="salmon" size="1rem" />
   </button>
 
-  <div class="master-controls-wrapper master-zone">
-    <Filters accentColor="red" bind:contrast bind:brightness bind:grayscale />
+  {#if selectedFiles.length > 1}
+    <div class="master-controls-wrapper master-zone">
+      <Filters accentColor="red" bind:contrast bind:brightness bind:grayscale />
 
-    <div class="master-rotation-controls">
-      <button
-        class="flip icon-button"
-        title="flip all images to the left by 90 degrees"
-        onclick={() => {
-          flipLeft = !flipLeft;
-        }}
-      >
-        <FlipLeft size="2.5rem" />
-      </button>
+      <div class="master-rotation-controls">
+        <button
+          class="flip icon-button"
+          title="flip all images to the left by 90 degrees"
+          onclick={() => {
+            flipLeft = !flipLeft;
+          }}
+        >
+          <FlipLeft size="2.5rem" />
+        </button>
+
+        <button
+          class="flip icon-button"
+          title="flip all images to the right by 90 degrees"
+          onclick={() => {
+            flipRight = !flipRight;
+          }}
+        >
+          <FlipRight size="2.5rem" />
+        </button>
+      </div>
 
       <button
-        class="flip icon-button"
-        title="flip all images to the right by 90 degrees"
-        onclick={() => {
-          flipRight = !flipRight;
-        }}
+        class="save-pdf icon-button"
+        title="save all in a PDF file"
+        onclick={canvasesToPdf}
       >
-        <FlipRight size="2.5rem" />
+        <SaveAll size="2.5rem" />
       </button>
     </div>
-
-    <button
-      class="save-pdf icon-button"
-      title="save all in a PDF file"
-      onclick={canvasesToPdf}
-    >
-      <SaveAll size="2.5rem" />
-    </button>
-  </div>
+  {/if}
 
   <div class="scans-wrapper">
     {#each selectedFiles as file, index (file.name)}

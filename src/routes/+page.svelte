@@ -4,19 +4,11 @@
   import FlipLeft from "@lucide/svelte/icons/iteration-ccw";
   import ClearFiles from "@lucide/svelte/icons/trash";
   import Image from "#lib/components/Image.svelte";
-  import { Scanner } from "scanic";
   import { onMount, setContext } from "svelte";
   import Filters from "#lib/components/Filters.svelte";
   import { canvasesToPdf } from "#lib/utils/canvases-to-pdf.ts";
   import { removeFileByFileName } from "#lib/utils/files.ts";
-
-  const scanner = new Scanner({
-    detector: "ml",
-  });
-
-  onMount(async () => {
-    await scanner.initialize();
-  });
+  import { Scanner } from "scanic";
 
   let selectedFiles: File[] = $state([]);
 
@@ -28,6 +20,13 @@
   let flipLeft = $state(false);
 
   let fileInputElement: HTMLInputElement;
+
+  onMount(async () => {
+    const scanner = new Scanner({
+      detector: "ml",
+    });
+    await scanner.initialize();
+  });
 
   setContext(
     "remove-file",
@@ -116,7 +115,6 @@
     {#each selectedFiles as file, index (file.name)}
       <Image
         {file}
-        {scanner}
         {contrast}
         {brightness}
         {grayscale}
@@ -139,7 +137,7 @@
   .master-controls-wrapper {
     display: grid;
     grid-template-columns: 3fr 1fr 1fr;
-    gap: 10vw;
+    column-gap: 2rem;
 
     .master-rotation-controls {
       display: flex;

@@ -11,9 +11,10 @@
     image: HTMLImageElement | HTMLCanvasElement | ImageData;
     canvas: HTMLCanvasElement;
     index: number;
+    useMLDetection: boolean;
   };
 
-  let { image, canvas = $bindable(), index }: PropsT = $props();
+  let { image, canvas = $bindable(), index, useMLDetection }: PropsT = $props();
 
   let editor: CornerEditor;
 
@@ -22,7 +23,7 @@
   onMount(async () => {
     const detection = await scanDocument(image, {
       mode: "detect",
-      detector: "ml",
+      detector: useMLDetection ? "ml" : "classical",
     });
 
     editor = createCornerEditor({

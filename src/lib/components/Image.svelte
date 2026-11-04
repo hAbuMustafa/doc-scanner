@@ -1,7 +1,7 @@
 <script lang="ts">
   import Save from "@lucide/svelte/icons/save";
   import EditCorners from "@lucide/svelte/icons/square-dashed-mouse-pointer";
-  import type { Scanner } from "scanic";
+  import { Scanner } from "scanic";
   import { getContext, onMount, untrack } from "svelte";
   import Rotate from "./Rotate.svelte";
   import Filters from "./Filters.svelte";
@@ -10,7 +10,6 @@
 
   type PropsT = {
     file: File;
-    scanner: Scanner;
     index: number;
 
     contrast: number;
@@ -23,7 +22,6 @@
 
   const {
     file,
-    scanner,
     index,
 
     contrast,
@@ -33,6 +31,14 @@
     flipRight,
     flipLeft,
   }: PropsT = $props();
+
+  let useMLDetection = $state(true);
+
+  const scanner = $derived(
+    new Scanner({
+      detector: useMLDetection ? "ml" : "classical",
+    }),
+  );
 
   let canvas: HTMLCanvasElement;
   let scanResult: HTMLCanvasElement = $state();
@@ -54,31 +60,40 @@
     if (!file || !file.name) return;
 
     img = new Image();
-    img.src = URL.createObjectURL(file);
+    const uri = URL.createObjectURL(file);
+    img.src = uri;
+    href = uri;
     await new Promise((resolve) => (img.onload = resolve));
 
-    href = img.src;
+    URL.revokeObjectURL(uri);
+  });
 
-    const result = await scanner.scan(img, {
-      mode: "extract",
-      output: "canvas",
-    });
+  $effect(() => {
+    const imageArb = img;
+    const scanArb = scanner;
 
-    if (result.success) {
-      scanResult = result.output as HTMLCanvasElement;
-      const ctx = canvas.getContext("2d")!;
-      canvas.width = scanResult.width;
-      canvas.height = scanResult.height;
-      ctx.filter = filters;
-      ctx.drawImage(scanResult, 0, 0);
-      ctx.filter = "none";
-      canvas.toBlob((blob) => {
-        if (!blob) return;
-        href = URL.createObjectURL(blob);
+    if (!img) return;
+
+    scanner
+      .scan(img, {
+        mode: "extract",
+        output: "canvas",
+      })
+      .then((result) => {
+        if (result.success) {
+          scanResult = result.output as HTMLCanvasElement;
+          const ctx = canvas.getContext("2d")!;
+          canvas.width = scanResult.width;
+          canvas.height = scanResult.height;
+          ctx.filter = filters;
+          ctx.drawImage(scanResult, 0, 0);
+          ctx.filter = "none";
+          canvas.toBlob((blob) => {
+            if (!blob) return;
+            href = URL.createObjectURL(blob);
+          });
+        }
       });
-    }
-
-    URL.revokeObjectURL(img.src);
   });
 
   $effect(() => {
@@ -141,6 +156,14 @@
     <Rotate bind:angle={r} />
 
     <div class="action-wrapper">
+      <label
+        class="detection-method"
+        title="detection method: {useMLDetection ? 'Advanced' : 'Basic'}"
+      >
+        <input type="checkbox" bind:checked={useMLDetection} />
+        {useMLDetection ? "Advanced" : "Basic"}
+      </label>
+
       <button
         class="icon-button"
         command="show-modal"
@@ -162,7 +185,7 @@
 </div>
 
 {#if scanResult}
-  <CornerEditor image={img} bind:canvas={scanResult} {index} />
+  <CornerEditor image={img} bind:canvas={scanResult} {index} {useMLDetection} />
 {/if}
 
 <style>
@@ -198,6 +221,19 @@
       display: flex;
       justify-content: space-around;
       align-items: center;
+
+      .detection-method {
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+
+        &:has(input:checked) {
+          background-color: royalblue;
+        }
+
+        input[type="checkbox"] {
+          display: none;
+        }
+      }
     }
   }
 </style>

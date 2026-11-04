@@ -72,7 +72,7 @@
     const imageArb = img;
     const scanArb = scanner;
 
-    if (!img && !img.complete) return;
+    if (!img && !img.complete && !img.naturalHeight) return;
 
     scanner
       .scan(img, {

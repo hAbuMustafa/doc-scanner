@@ -13,7 +13,6 @@
 
   const scanner = new Scanner({
     detector: "ml",
-    ml: { assetBaseUrl: "/scanic-ml/dist/" },
   });
 
   onMount(async () => {

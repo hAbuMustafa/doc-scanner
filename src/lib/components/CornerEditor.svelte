@@ -23,7 +23,6 @@
     const detection = await scanDocument(image, {
       mode: "detect",
       detector: "ml",
-      ml: { assetBaseUrl: "/scanic-ml/dist/" },
     });
 
     editor = createCornerEditor({

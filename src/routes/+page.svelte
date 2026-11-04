@@ -51,18 +51,18 @@
   type="file"
   multiple
   accept="image/*"
-  onchange={(e) => {
-    const input = e.currentTarget as HTMLInputElement;
+  onchange={() => {
+    let files = fileInputElement.files;
     const dt = new DataTransfer();
-    if (input.files) {
-      for (let i = 0; i < input.files.length; i++) {
-        if (input.files[i].type.startsWith("image/")) {
-          input.files[i].id = input.files[i].name;
-          dt.items.add(input.files[i]);
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        if (files[i].type.startsWith("image/")) {
+          files[i].id = files[i].name;
+          dt.items.add(files[i]);
         }
       }
-      input.files = dt.files;
-      selectedFiles = Array.from(input.files);
+      files = dt.files;
+      selectedFiles = Array.from(files);
     }
   }}
   bind:this={fileInputElement}

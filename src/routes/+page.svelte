@@ -9,7 +9,6 @@
   import Filters from "#lib/components/Filters.svelte";
   import { canvasesToPdf } from "#lib/utils/canvases-to-pdf.ts";
   import { removeFileByFileName } from "#lib/utils/files.ts";
-  import { dragHandleZone, type DndEvent } from "svelte-dnd-action";
 
   const scanner = new Scanner({
     detector: "ml",
@@ -35,10 +34,6 @@
     (fileName: string) =>
       (selectedFiles = removeFileByFileName(fileInputElement, fileName)),
   );
-
-  function handleSort(e: CustomEvent<DndEvent<File>>) {
-    selectedFiles = Array.from(e.detail.items);
-  }
 </script>
 
 <svelte:head>
@@ -117,12 +112,7 @@
     </button>
   </div>
 
-  <div
-    class="scans-wrapper"
-    use:dragHandleZone={{ items: selectedFiles, flipDurationMs: 200 }}
-    onconsider={handleSort}
-    onfinalize={handleSort}
-  >
+  <div class="scans-wrapper">
     {#each selectedFiles as file, index (file.name)}
       <Image
         {file}
